@@ -46,10 +46,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="menu.h" />
-		<Unit filename="video.c">
+		<Unit filename="render.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="video.h" />
+		<Unit filename="render.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />
