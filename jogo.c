@@ -87,6 +87,7 @@ static bool sn_jogo_mover_cobra(){
 
     Bloco* atual = cobra+cobra_ponta;
     Bloco proximo;
+    int i;
 
     switch(cobra_direcao){
         case 'D':
@@ -136,6 +137,13 @@ static bool sn_jogo_mover_cobra(){
         sn_jogo_posicionar_comida();
 
     }else{
+
+        /* Verifica se a cobra não colidiu consigo */
+        for(i = 0 ; i < cobra_tam ; i++){
+            if(cobra[i].x == proximo.x && cobra[i].y == proximo.y){
+                return false;
+            }
+        }
 
         cobra[cobra_ponta] = proximo;
 
