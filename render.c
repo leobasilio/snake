@@ -57,8 +57,8 @@ void sn_render_block(int x, int y){
 
     SDL_Rect rect = {x*SN_BLOCO_SIZE + SN_BLOCO_PADDING,
                      y*SN_BLOCO_SIZE + SN_BLOCO_PADDING,
-                     SN_BLOCO_SIZE - SN_BLOCO_PADDING,
-                     SN_BLOCO_SIZE - SN_BLOCO_PADDING};
+                     SN_BLOCO_SIZE - 2*SN_BLOCO_PADDING,
+                     SN_BLOCO_SIZE - 2*SN_BLOCO_PADDING};
 
     SDL_RenderFillRect(_renderer, &rect);
 

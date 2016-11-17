@@ -16,6 +16,8 @@ static char cobra_direcao; /* Cima, Baixo, Esquerda, Direita*/
 static int cobra_ponta; /* Cabeça da cobra */
 static int cobra_vel = 150; /* Velocidade da cobra */
 
+static Bloco comida;
+
 static int mesa_w, mesa_h; /* Dimensões da área interna do jogo */
 
 static void sn_jogo_render(){
@@ -41,7 +43,40 @@ static void sn_jogo_render(){
         sn_render_block(MARGIN + (cobra+i)->x + 1, MARGIN + (cobra+i)->y + 1);
     }
 
+    sn_render_block(MARGIN + comida.x + 1, MARGIN + comida.y + 1);
+
     sn_render_flush();
+
+}
+
+static void sn_jogo_posicionar_comida(){
+
+    int i;
+
+    do{
+
+        comida.x = rand() % mesa_w;
+        comida.y = rand() % mesa_h;
+
+        for(i = 0 ; i < cobra_tam ; i++){
+            if(cobra[i].x == comida.x && cobra[i].y == comida.y){
+                break;
+            }
+        }
+
+    }while(i != cobra_tam);
+
+}
+
+static void sn_jogo_comer_comida(){
+
+    int i;
+
+    cobra = realloc(cobra, ++cobra_tam * sizeof(Bloco));
+
+    for(i = cobra_tam-1 ; i > cobra_ponta ; i--){
+        *(cobra+i) = *(cobra+i-1);
+    }
 
 }
 
@@ -92,7 +127,19 @@ static bool sn_jogo_mover_cobra(){
 
     if(cobra_ponta >= cobra_tam) cobra_ponta = 0;
 
-    cobra[cobra_ponta] = proximo;
+    if(proximo.x == comida.x && proximo.y == comida.y){
+
+        sn_jogo_comer_comida();
+
+        cobra[cobra_ponta] = proximo;
+
+        sn_jogo_posicionar_comida();
+
+    }else{
+
+        cobra[cobra_ponta] = proximo;
+
+    }
 
     return true;
 
@@ -120,6 +167,8 @@ void sn_jogo_run(){
 
     cobra_ponta = 0;
     cobra_direcao = 'D';
+
+    sn_jogo_posicionar_comida();
 
     //==========================
 
