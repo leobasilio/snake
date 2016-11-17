@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#define MARGIN 2 /* Margem da área interna, sem contar a borda */
+#define MARGIN 2 /* Margem da área interna, em blocos, sem contar a borda */
 
 typedef struct {
     int x;
@@ -11,10 +11,10 @@ typedef struct {
 } Bloco; /* Posições em relação ao topo esquerdo da mesa */
 
 static Bloco *cobra;
-static int cobra_tam = 4;
+static int cobra_tam;
 static char cobra_direcao; /* Cima, Baixo, Esquerda, Direita*/
 static int cobra_ponta; /* Cabeça da cobra */
-static int cobra_vel = 150; /* Velocidade da cobra */
+static int cobra_vel; /* Velocidade da cobra */
 
 static Bloco comida;
 
@@ -77,6 +77,8 @@ static void sn_jogo_comer_comida(){
     for(i = cobra_tam-1 ; i > cobra_ponta ; i--){
         *(cobra+i) = *(cobra+i-1);
     }
+
+    cobra_vel *= 0.99;
 
 }
 
@@ -164,6 +166,9 @@ void sn_jogo_run(){
     mesa_h = SN_BLOCOS_H - 4*MARGIN - 2;
 
     //==========================
+
+    cobra_tam = 4;
+    cobra_vel = 150;
 
     cobra = malloc(cobra_tam*sizeof(Bloco));
 
