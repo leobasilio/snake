@@ -17,7 +17,7 @@ void sn_render_init(SDL_Renderer* renderer){
     SDL_SetRenderDrawColor(_renderer, 0xAE, 0xCE, 0x8B, 0xFF);
     SDL_RenderFillRect(_renderer, &rect);
 
-    SDL_SetRenderDrawColor(_renderer, 0x8E, 0xB3, 0x67, 0xFF);
+    SDL_SetRenderDrawColor(_renderer, 0xA4, 0xC1, 0x84, 0xFF);
 
     rect.h = rect.w = SN_BLOCO_SIZE - 2*SN_BLOCO_PADDING;
 
