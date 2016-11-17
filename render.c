@@ -64,6 +64,30 @@ void sn_render_block(int x, int y){
 
 }
 
+void sn_render_bitmap(char* nome, int x, int y){
+
+    char arquivo[50];
+
+    sprintf(arquivo, "sprites/%s.bmp", nome);
+
+    SDL_Rect src_rect;
+    SDL_Rect dst_rect = {x*SN_BLOCO_SIZE + SN_BLOCO_PADDING, y*SN_BLOCO_SIZE + SN_BLOCO_PADDING, 0, 0};
+
+    SDL_Surface* bitmap = SDL_LoadBMP(arquivo);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(_renderer, bitmap);
+
+    SDL_GetClipRect(bitmap, &src_rect);
+
+    dst_rect.w = src_rect.w;
+    dst_rect.h = src_rect.h;
+
+    SDL_RenderCopy(_renderer, texture, &src_rect, &dst_rect);
+
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(bitmap);
+
+}
+
 void sn_render_flush(){
     SDL_RenderPresent(_renderer);
 }

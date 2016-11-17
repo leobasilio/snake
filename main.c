@@ -12,7 +12,7 @@ int main(int argc, char* argv[]){
 
     if(janela != NULL){
 
-        SDL_Renderer* renderer = SDL_CreateRenderer(janela, -1, 0);
+        SDL_Renderer* renderer = SDL_CreateRenderer(janela, -1, SDL_RENDERER_ACCELERATED);
 
         if(renderer != NULL){
 
@@ -21,6 +21,8 @@ int main(int argc, char* argv[]){
             sn_menu_run();
 
             sn_render_clear();
+
+            SDL_DestroyRenderer(renderer);
 
         }else{
             printf("Falha ao criar o renderer: %s", SDL_GetError());

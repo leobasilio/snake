@@ -1,8 +1,6 @@
 #include "jogo.h"
 #include "render.h"
 
-#include <stdbool.h>
-
 #define MARGIN 2 /* Margem da área interna, em blocos, sem contar a borda */
 
 typedef struct {

@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 
 #define SN_JANELA_WIDTH      640
