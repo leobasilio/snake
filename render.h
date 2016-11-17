@@ -10,7 +10,4 @@ void sn_render_background();
 void sn_render_block(int x, int y);
 void sn_render_flush();
 
-/*void sn_render_draw_rect(SDL_Renderer* renderer, int x, int y, int w, int h, uint32_t cor);
-void sn_video_fill_rect(SDL_Renderer* renderer, int x, int y, int w, int h, uint32_t cor);*/
-
 #endif // RENDER_H_INCLUDED

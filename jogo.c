@@ -196,13 +196,21 @@ void sn_jogo_run(){
                 case SDL_KEYDOWN:
                     switch(evento.key.keysym.sym){
                         case SDLK_DOWN:
-                            cobra_direcao = 'B'; break;
+                            if(cobra_direcao != 'C')
+                                cobra_direcao = 'B';
+                            break;
                         case SDLK_UP:
-                            cobra_direcao = 'C'; break;
+                            if(cobra_direcao != 'B')
+                                cobra_direcao = 'C';
+                            break;
                         case SDLK_RIGHT:
-                            cobra_direcao = 'D'; break;
+                            if(cobra_direcao != 'E')
+                                cobra_direcao = 'D';
+                            break;
                         case SDLK_LEFT:
-                            cobra_direcao = 'E'; break;
+                            if(cobra_direcao != 'D')
+                                cobra_direcao = 'E';
+                            break;
                     }
                     break;
             }
