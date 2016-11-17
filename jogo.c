@@ -142,7 +142,7 @@ static bool sn_jogo_mover_cobra(){
 
         /* Verifica se a cobra não colidiu consigo */
         for(i = 0 ; i < cobra_tam ; i++){
-            if(cobra[i].x == proximo.x && cobra[i].y == proximo.y){
+            if(cobra[i].x == proximo.x && cobra[i].y == proximo.y && i != cobra_ponta){
                 return false;
             }
         }
