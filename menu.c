@@ -8,7 +8,7 @@
 
 typedef struct {
     char nome[20];
-    void* (*funcao)();
+    void (*funcao)();
 } Opcao;
 
 static int selecao = 0;
@@ -29,7 +29,7 @@ static void sn_menu_render(){
 
         sprintf(nome, "menu_%s_%s", lista[i].nome, (selecao == i) ? "on" : "off");
 
-        sn_render_bitmap(nome, MENU_X, MENU_Y + 2*i);
+        sn_render_file(nome, MENU_X, MENU_Y + 2*i);
 
     }
 

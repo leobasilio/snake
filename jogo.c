@@ -21,10 +21,11 @@ static int pontuacao;
 
 static int mesa_w, mesa_h; /* Dimensões da área interna do jogo */
 
+static SN_BITMAP sprites[11];
+
 static void sn_jogo_render(){
 
     int i, j;
-    char bmp[10];
 
     sn_render_background();
 
@@ -48,16 +49,11 @@ static void sn_jogo_render(){
     sn_render_block(MARGIN + comida.x + 1, MARGIN + comida.y + 1);
 
     /* Pontuação */
-
-    sn_render_bitmap("pontos", MARGIN + mesa_w - 12, MARGIN + mesa_h + 3);
-
     for(i = 0, j = 10 ; i < 3 ; i++, j *= 10){
-
-        sprintf(bmp, "n%i", 10 * (pontuacao % j) / j);
-
-        sn_render_bitmap(bmp, MARGIN + mesa_w - 2*i, MARGIN + mesa_h + 3);
-
+        sn_render_bitmap(sprites[10 * (pontuacao % j) / j], MARGIN + mesa_w - 2*i, MARGIN + mesa_h + 3);
     }
+
+    sn_render_bitmap(sprites[10], MARGIN + mesa_w - 12, MARGIN + mesa_h + 3);
 
     sn_render_flush();
 
@@ -171,13 +167,9 @@ static bool sn_jogo_mover_cobra(){
 
 }
 
-void sn_jogo_run(){
+static void sn_jogo_init(){
 
-    SDL_Event evento;
-    bool morreu = false;
     int i;
-
-    //==========================
 
     mesa_w = SN_BLOCOS_W - 2*MARGIN - 2;
     mesa_h = SN_BLOCOS_H - 3*MARGIN - 2;
@@ -193,15 +185,51 @@ void sn_jogo_run(){
 
     cobra = malloc(cobra_tam*sizeof(Bloco));
 
-    cobra[0].x = (mesa_w+TAM_INICIAL)/2;
-    cobra[0].y = (mesa_h)/2;
+    cobra[0].x = mesa_w/2;
+    cobra[0].y = mesa_h/2;
 
     for(i = 1 ; i < TAM_INICIAL ; i++){
         cobra[i].x = cobra[0].x + i - TAM_INICIAL;
         cobra[i].y = cobra[0].y;
     }
 
+    //==========================
+
+    char arq[] = "n0";
+
+    for(i = 0 ; i < 10 ; i++){
+        arq[1] = '0'+i;
+        sprites[i] = sn_load_bitmap(arq);
+    }
+
+    sprites[10] = sn_load_bitmap("pontos");
+
+    //==========================
+
     sn_jogo_posicionar_comida();
+
+}
+
+static void sn_jogo_clear(){
+
+    int i;
+
+    for(i = 0 ; i < 11 ; i++){
+        sn_free_bitmap(sprites[i]);
+    }
+
+    free(cobra);
+
+}
+
+void sn_jogo_run(){
+
+    SDL_Event evento;
+    bool morreu = false;
+
+    //==========================
+
+    sn_jogo_init();
 
     //==========================
 
@@ -212,6 +240,7 @@ void sn_jogo_run(){
         while(SDL_PollEvent(&evento)){
             switch(evento.type){
                 case SDL_QUIT:
+                    sn_jogo_clear();
                     return;
                 case SDL_KEYDOWN:
                     switch(evento.key.keysym.sym){
@@ -247,5 +276,7 @@ void sn_jogo_run(){
         }
 
     }
+
+    sn_jogo_clear();
 
 }
