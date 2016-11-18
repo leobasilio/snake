@@ -3,6 +3,8 @@
 
 #define MARGIN 2 /* Margem da área interna, em blocos, sem contar a borda */
 
+#define TAM_INICIAL 4 /* Tamanho inicial da cobra */
+
 typedef struct {
     int x;
     int y;
@@ -15,12 +17,14 @@ static int cobra_ponta; /* Cabeça da cobra */
 static int cobra_vel; /* Velocidade da cobra */
 
 static Bloco comida;
+static int pontuacao;
 
 static int mesa_w, mesa_h; /* Dimensões da área interna do jogo */
 
 static void sn_jogo_render(){
 
-    int i;
+    int i, j;
+    char bmp[10];
 
     sn_render_background();
 
@@ -42,6 +46,18 @@ static void sn_jogo_render(){
     }
 
     sn_render_block(MARGIN + comida.x + 1, MARGIN + comida.y + 1);
+
+    /* Pontuação */
+
+    sn_render_bitmap("pontos", MARGIN + mesa_w - 12, MARGIN + mesa_h + 3);
+
+    for(i = 0, j = 10 ; i < 3 ; i++, j *= 10){
+
+        sprintf(bmp, "n%i", 10 * (pontuacao % j) / j);
+
+        sn_render_bitmap(bmp, MARGIN + mesa_w - 2*i, MARGIN + mesa_h + 3);
+
+    }
 
     sn_render_flush();
 
@@ -77,6 +93,8 @@ static void sn_jogo_comer_comida(){
     }
 
     cobra_vel *= 0.99;
+
+    pontuacao++;
 
 }
 
@@ -157,27 +175,31 @@ void sn_jogo_run(){
 
     SDL_Event evento;
     bool morreu = false;
+    int i;
 
     //==========================
 
     mesa_w = SN_BLOCOS_W - 2*MARGIN - 2;
-    mesa_h = SN_BLOCOS_H - 4*MARGIN - 2;
+    mesa_h = SN_BLOCOS_H - 3*MARGIN - 2;
 
     //==========================
 
-    cobra_tam = 4;
+    pontuacao = 0;
+
+    cobra_tam = TAM_INICIAL;
     cobra_vel = 150;
+    cobra_ponta = 0;
+    cobra_direcao = 'D';
 
     cobra = malloc(cobra_tam*sizeof(Bloco));
 
-    cobra[0].x = (mesa_w/2) + 2;
-    cobra[1].x = cobra[0].x-3;
-    cobra[2].x = cobra[0].x-2;
-    cobra[3].x = cobra[0].x-1;
-    cobra[0].y = cobra[1].y = cobra[2].y = cobra[3].y = (mesa_h/2);
+    cobra[0].x = (mesa_w+TAM_INICIAL)/2;
+    cobra[0].y = (mesa_h)/2;
 
-    cobra_ponta = 0;
-    cobra_direcao = 'D';
+    for(i = 1 ; i < TAM_INICIAL ; i++){
+        cobra[i].x = cobra[0].x + i - TAM_INICIAL;
+        cobra[i].y = cobra[0].y;
+    }
 
     sn_jogo_posicionar_comida();
 
