@@ -34,6 +34,10 @@
 		<Linker>
 			<Add library="libSDL2" />
 		</Linker>
+		<Unit filename="audio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="audio.h" />
 		<Unit filename="global.h" />
 		<Unit filename="jogo.c">
 			<Option compilerVar="CC" />
