@@ -1,5 +1,6 @@
 #include "jogo.h"
 #include "render.h"
+#include "audio.h"
 
 #define MARGIN 2 /* Margem da área interna, em blocos, sem contar a borda */
 
@@ -222,6 +223,18 @@ static void sn_jogo_clear(){
 
 }
 
+static void sn_jogo_fim(){
+
+    sn_jogo_clear();
+
+    sn_render_file("fim", MARGIN + mesa_w/2 - 9, MARGIN + mesa_h/2 - 1);
+
+    sn_render_flush();
+
+    sn_audio_play("fim");
+
+}
+
 void sn_jogo_run(){
 
     SDL_Event evento;
@@ -277,6 +290,6 @@ void sn_jogo_run(){
 
     }
 
-    sn_jogo_clear();
+    sn_jogo_fim();
 
 }
