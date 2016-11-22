@@ -4,7 +4,7 @@
 
 #define MENU_Y 8
 #define MENU_X 8
-#define QTD_OPCOES 5
+#define QTD_OPCOES 4
 
 typedef struct {
     char nome[20];
@@ -15,7 +15,6 @@ static int selecao = 0;
 static Opcao lista[QTD_OPCOES] = {{"iniciar", sn_jogo_run},
                                   {"opcoes", NULL},
                                   {"ranking", NULL},
-                                  {"sobre", NULL},
                                   {"sair", NULL}};
 
 static void sn_menu_render(){
