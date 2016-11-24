@@ -239,10 +239,13 @@ void sn_jogo_run(){
 
     SDL_Event evento;
     bool morreu = false;
+    char nova_direcao;
 
     //==========================
 
     sn_jogo_init();
+
+    nova_direcao = cobra_direcao;
 
     //==========================
 
@@ -259,19 +262,19 @@ void sn_jogo_run(){
                     switch(evento.key.keysym.sym){
                         case SDLK_DOWN:
                             if(cobra_direcao != 'C')
-                                cobra_direcao = 'B';
+                                nova_direcao = 'B';
                             break;
                         case SDLK_UP:
                             if(cobra_direcao != 'B')
-                                cobra_direcao = 'C';
+                                nova_direcao = 'C';
                             break;
                         case SDLK_RIGHT:
                             if(cobra_direcao != 'E')
-                                cobra_direcao = 'D';
+                                nova_direcao = 'D';
                             break;
                         case SDLK_LEFT:
                             if(cobra_direcao != 'D')
-                                cobra_direcao = 'E';
+                                nova_direcao = 'E';
                             break;
                     }
                     break;
@@ -279,6 +282,8 @@ void sn_jogo_run(){
         }
 
         if(SDL_TICKS_PASSED(SDL_GetTicks(), tick_inicial+cobra_vel)){
+
+            cobra_direcao = nova_direcao;
 
             morreu = !sn_jogo_mover_cobra();
 
