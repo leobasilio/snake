@@ -281,7 +281,7 @@ void sn_jogo_run(){
             }
         }
 
-        if(SDL_TICKS_PASSED(SDL_GetTicks(), tick_inicial+cobra_vel)){
+        if(SDL_TICKS_PASSED(SDL_GetTicks(), tick_inicial+cobra_vel) || nova_direcao != cobra_direcao){
 
             cobra_direcao = nova_direcao;
 
