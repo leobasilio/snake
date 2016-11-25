@@ -1,6 +1,7 @@
 #include "jogo.h"
 #include "render.h"
 #include "audio.h"
+#include "ranking.h"
 
 #define MARGIN 2 /* Margem da área interna, em blocos, sem contar a borda */
 
@@ -232,6 +233,8 @@ static void sn_jogo_fim(){
     sn_render_flush();
 
     sn_audio_play("fim");
+
+    sn_ranking_novo(pontuacao);
 
 }
 
