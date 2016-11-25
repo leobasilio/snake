@@ -261,18 +261,22 @@ void sn_jogo_run(){
                 case SDL_KEYDOWN:
                     switch(evento.key.keysym.sym){
                         case SDLK_DOWN:
+                        case SDLK_s:
                             if(cobra_direcao != 'C')
                                 nova_direcao = 'B';
                             break;
                         case SDLK_UP:
+                        case SDLK_w:
                             if(cobra_direcao != 'B')
                                 nova_direcao = 'C';
                             break;
                         case SDLK_RIGHT:
+                        case SDLK_d:
                             if(cobra_direcao != 'E')
                                 nova_direcao = 'D';
                             break;
                         case SDLK_LEFT:
+                        case SDLK_a:
                             if(cobra_direcao != 'D')
                                 nova_direcao = 'E';
                             break;
