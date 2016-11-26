@@ -3,7 +3,7 @@
 #include "ranking.h"
 #include "render.h"
 
-#define MENU_Y 8
+#define MENU_Y 10
 #define MENU_X 8
 #define QTD_OPCOES 4
 
@@ -24,6 +24,8 @@ static void sn_menu_render(){
     char nome[30];
 
     sn_render_background();
+
+    sn_render_file("logo", 7, 2);
 
     for(i = 0 ; i < QTD_OPCOES ; i++){
 
