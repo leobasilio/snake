@@ -49,6 +49,8 @@ void sn_menu_run(){
 
                 case SDL_QUIT:
 
+                    exit(0);
+
                     return;
 
                 case SDL_KEYDOWN:

@@ -92,6 +92,8 @@ void sn_ranking_ler_nome(char* nome){
 
                 case SDL_QUIT:
 
+                    exit(0);
+
                     return;
 
                 case SDL_KEYDOWN:
@@ -266,6 +268,8 @@ void sn_ranking_run(){
                 case SDL_QUIT:
 
                     sn_ranking_clear();
+
+                    exit(0);
 
                     return;
 
