@@ -68,8 +68,7 @@ void sn_ranking_render(Registro entradas[], int tam){
 
 void sn_ranking_render_ler(char* nome){
 
-    int i, len = strlen(nome);
-    char letra[20];
+    int len = strlen(nome);
 
     sn_render_file("ranking_nome", 4, 5);
 
