@@ -210,6 +210,10 @@ static void sn_jogo_init(){
 
     sn_jogo_posicionar_comida();
 
+    //==========================
+
+    sn_audio_start("jogo");
+
 }
 
 static void sn_jogo_clear(){
@@ -221,6 +225,8 @@ static void sn_jogo_clear(){
     }
 
     free(cobra);
+
+    sn_audio_stop();
 
 }
 
