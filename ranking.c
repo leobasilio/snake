@@ -20,17 +20,7 @@ void sn_ranking_render_ler(char* nome){
 
     sn_render_file("ranking_nome", 4, 5);
 
-    for(i = 0 ; i < len ; i++){
-
-        if(nome[i] != ' '){
-
-            sprintf(letra, "letra_%c", nome[i]);
-
-            sn_render_file(letra, i + (SN_BLOCOS_W - len)/2, 12);
-
-        }
-
-    }
+    sn_render_string(nome, (SN_BLOCOS_W - len)/2, 12);
 
     sn_render_flush();
 

@@ -3,6 +3,8 @@
 static SDL_Renderer* _renderer;
 static SDL_Texture* _fundo;
 
+static SN_BITMAP alfabeto[37]; /* 0-9 números, 10-35 letras, 36 hífen */
+
 void sn_render_init(SDL_Renderer* renderer){
 
     SDL_Rect rect = {0, 0, SN_JANELA_WIDTH, SN_JANELA_HEIGHT};
@@ -39,10 +41,35 @@ void sn_render_init(SDL_Renderer* renderer){
 
     SDL_SetRenderDrawColor(_renderer, 0x36, 0x38, 0x1B, 0xFF);
 
+    //================================
+
+    char arquivo[20];
+    int i;
+
+    for(i = 0 ; i < 10 ; i++){
+        sprintf(arquivo, "letra_%i", i);
+        alfabeto[i] = sn_load_bitmap(arquivo);
+    }
+
+    for(i = 0 ; i < 26 ; i++){
+        sprintf(arquivo, "letra_%c", 'a' + i);
+        alfabeto[10+i] = sn_load_bitmap(arquivo);
+    }
+
+    alfabeto[36] = sn_load_bitmap("letra_-");
+
 }
 
 void sn_render_clear(){
+
+    int i;
+
+    for(i = 0 ; i < 37 ; i++){
+        sn_free_bitmap(alfabeto[i]);
+    }
+
     SDL_DestroyTexture(_fundo);
+
 }
 
 void sn_render_background(){
@@ -110,4 +137,20 @@ SN_BITMAP sn_load_bitmap(const char* nome){
 
 void sn_free_bitmap(SN_BITMAP bitmap){
     SDL_DestroyTexture(bitmap.texture);
+}
+
+void sn_render_string(char* s, int x, int y){
+
+    for( ; *s ; s++, x++){
+
+        if(*s >= '0' && *s <= '9'){
+            sn_render_bitmap(alfabeto[*s-'0'], x, y);
+        }else if(*s >= 'a' && *s <= 'z'){
+            sn_render_bitmap(alfabeto[*s-'a'+10], x, y);
+        }else if(*s == '-'){
+            sn_render_bitmap(alfabeto[36], x, y);
+        }
+
+    }
+
 }

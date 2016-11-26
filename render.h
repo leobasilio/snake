@@ -20,4 +20,6 @@ void sn_render_flush();
 SN_BITMAP sn_load_bitmap(const char* nome);
 void sn_free_bitmap(SN_BITMAP bitmap);
 
+void sn_render_string(char* s, int x, int y);
+
 #endif // RENDER_H_INCLUDED
