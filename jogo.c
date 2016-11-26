@@ -236,6 +236,8 @@ static void sn_jogo_fim(){
 
     sn_ranking_novo(pontuacao);
 
+    sn_ranking_run();
+
 }
 
 void sn_jogo_run(){

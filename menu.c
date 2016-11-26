@@ -14,7 +14,7 @@ typedef struct {
 static int selecao = 0;
 static Opcao lista[QTD_OPCOES] = {{"iniciar", sn_jogo_run},
                                   {"opcoes", NULL},
-                                  {"ranking", NULL},
+                                  {"ranking", sn_ranking_run},
                                   {"sair", NULL}};
 
 static void sn_menu_render(){

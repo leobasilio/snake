@@ -5,6 +5,7 @@
 #define QTD_LIMITE 10
 #define TAM_NOME 15
 #define NOME_ARQUIVO "ranking.bin"
+#define ALTURA (SN_BLOCOS_H-4) /* Altura da tela */
 
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 
@@ -12,6 +13,58 @@ typedef struct {
     char nome[TAM_NOME+1];
     int pontuacao;
 } Registro;
+
+static int animacao = 0; // estágio da animação da borda
+
+static SN_BITMAP bmp_titulo;
+static Registro lista[QTD_LIMITE]; /* lista do ranking */
+static int qtd_lista = 0;
+
+void sn_ranking_render(Registro entradas[], int tam){
+
+    int i, y_base = (SN_BLOCOS_H - ALTURA)/2;
+    char linha[26];
+
+    sn_render_background();
+
+    sn_render_bitmap(bmp_titulo, SN_BLOCOS_W/2-6, y_base+2);
+
+    /* Animação horizontal */
+    for(i = 1 ; i < SN_BLOCOS_W-1 ; i++){
+        if(i % 2 == animacao){
+            sn_render_block(i, y_base);
+        }else{
+            sn_render_block(i, y_base + ALTURA - 1);
+        }
+    }
+
+    /* Animação vertical */
+    for(i = y_base+1 ; i < SN_BLOCOS_H-y_base ; i++){
+        if(i % 2 == animacao){
+            sn_render_block(SN_BLOCOS_W-2, i);
+        }else{
+            sn_render_block(1, i);
+        }
+    }
+
+    /* Lista do ranking */
+
+    for(i = 0 ; i < QTD_LIMITE ; i++){
+
+        if(i < qtd_lista){
+            sprintf(linha, "%2i %-17s %03i", i+1, lista[i].nome, lista[i].pontuacao);
+        }else{
+            sprintf(linha, "%2i %-17s %s", i+1, "----------", "---");
+        }
+
+        sn_render_string(linha, 4, y_base+6+i);
+    }
+
+    sn_render_flush();
+
+    animacao = (animacao == 0 ? 1 : 0);
+
+}
 
 void sn_ranking_render_ler(char* nome){
 
@@ -170,7 +223,81 @@ void sn_ranking_novo(int pontuacao){
 
 }
 
+void sn_ranking_init(){
+
+    bmp_titulo = sn_load_bitmap("ranking_titulo");
+
+    //===========================
+
+    FILE* arq = fopen(NOME_ARQUIVO, "r");
+
+    if(arq){
+
+        qtd_lista = fread(lista, sizeof(Registro), QTD_LIMITE, arq);
+
+        fclose(arq);
+
+    }else{
+
+        qtd_lista = 0;
+
+    }
+
+}
+
+void sn_ranking_clear(){
+
+    sn_free_bitmap(bmp_titulo);
+
+}
+
 void sn_ranking_run(){
 
+    SDL_Event evento;
+    Uint32 tick = SDL_GetTicks();
+
+    sn_ranking_init();
+
+    while(1){
+
+        while(SDL_PollEvent(&evento)){
+
+            switch(evento.type){
+
+                case SDL_QUIT:
+
+                    sn_ranking_clear();
+
+                    return;
+
+                case SDL_KEYDOWN:
+
+                    switch(evento.key.keysym.sym){
+
+                        case SDLK_RETURN:
+                        case SDLK_RETURN2:
+                        case SDLK_ESCAPE:
+
+                            sn_ranking_clear();
+
+                            return;
+
+                    }
+
+                    break;
+
+            }
+
+        }
+
+        if(SDL_TICKS_PASSED(SDL_GetTicks(), tick)){
+
+            sn_ranking_render(0, 0);
+
+            tick = SDL_GetTicks()+200;
+
+        }
+
+    }
 
 }
