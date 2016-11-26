@@ -299,6 +299,9 @@ void sn_jogo_run(){
                             if(cobra_direcao != 'D')
                                 nova_direcao = 'E';
                             break;
+                        case SDLK_ESCAPE:
+                            sn_jogo_clear();
+                            return;
                     }
 
                     break;

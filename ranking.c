@@ -125,7 +125,9 @@ void sn_ranking_ler_nome(char* nome){
 
                         }
 
-                    }else if(evento.key.keysym.sym == SDLK_RETURN || evento.key.keysym.sym == SDLK_RETURN2){
+                    }else if(evento.key.keysym.sym == SDLK_RETURN ||
+                             evento.key.keysym.sym == SDLK_RETURN2 ||
+                             evento.key.keysym.sym == SDLK_ESCAPE){
 
                         return;
 

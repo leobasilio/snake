@@ -1,5 +1,6 @@
 #include "menu.h"
 #include "jogo.h"
+#include "ranking.h"
 #include "render.h"
 
 #define MENU_Y 8
@@ -88,6 +89,10 @@ void sn_menu_run(){
                             }
 
                             break;
+
+                        case SDLK_ESCAPE:
+
+                            return;
 
                     }
 
