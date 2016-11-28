@@ -84,6 +84,8 @@ void sn_ranking_ler_nome(char* nome){
     bool refresh = true;
     int len = strlen(nome);
 
+    while(SDL_PollEvent(&evento)); // limpar pool de eventos
+
     while(1){
 
         while(SDL_PollEvent(&evento)){
