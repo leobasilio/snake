@@ -1,4 +1,5 @@
 #include "audio.h"
+#include "opcoes.h"
 
 #define NOME_AUDIO "audio/%s.wav"
 
@@ -18,6 +19,10 @@ void sn_audio_play(char* nome){
 
         wav_spec.callback = NULL;
         wav_spec.userdata = NULL;
+
+        if(!sn_opcoes_som_get()){
+            SDL_memset(wav_buf, 0, wav_len); // silencia áudio
+        }
 
         deviceId = SDL_OpenAudioDevice(NULL, 0, &wav_spec, NULL, 0);
 
@@ -76,6 +81,8 @@ void sn_audio_start(char* nome){
 
     char arquivo[50];
     SDL_AudioSpec wav_spec;
+
+    if(!sn_opcoes_som_get()) return;
 
     sprintf(arquivo, NOME_AUDIO, nome);
 
