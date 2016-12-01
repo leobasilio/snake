@@ -1,24 +1,13 @@
 #include "menu.h"
 #include "jogo.h"
 #include "ranking.h"
+#include "opcoes.h"
 #include "render.h"
 
 #define MENU_Y 10
 #define MENU_X 8
-#define QTD_OPCOES 4
 
-typedef struct {
-    char nome[20];
-    void (*funcao)();
-} Opcao;
-
-static int selecao = 0;
-static Opcao lista[QTD_OPCOES] = {{"iniciar", sn_jogo_run},
-                                  {"opcoes", NULL},
-                                  {"ranking", sn_ranking_run},
-                                  {"sair", NULL}};
-
-static void sn_menu_render(){
+static void sn_menu_render(SnMenuOpcao* lista, int qtd, int selecao){
 
     int i;
     char nome[30];
@@ -27,7 +16,7 @@ static void sn_menu_render(){
 
     sn_render_file("logo", 7, 2);
 
-    for(i = 0 ; i < QTD_OPCOES ; i++){
+    for(i = 0 ; i < qtd ; i++){
 
         sprintf(nome, "menu_%s_%s", lista[i].nome, (selecao == i) ? "on" : "off");
 
@@ -41,8 +30,20 @@ static void sn_menu_render(){
 
 void sn_menu_run(){
 
+    SnMenuOpcao lista[4] = {{"iniciar", sn_jogo_run, NULL},
+                          {"opcoes", sn_opcoes_run, NULL},
+                          {"ranking", sn_ranking_run, NULL},
+                          {"sair", NULL, NULL}};
+
+    sn_menu_custom(lista, 4);
+
+}
+
+void sn_menu_custom(SnMenuOpcao* lista, int qtd){
+
     SDL_Event evento;
     bool refresh = true;
+    int selecao = 0;
 
     while(1){
 
@@ -62,7 +63,7 @@ void sn_menu_run(){
 
                         case SDLK_DOWN:
 
-                            if(selecao < QTD_OPCOES-1){
+                            if(selecao < qtd-1){
                                 selecao++;
                                 refresh = true;
                             }
@@ -76,11 +77,24 @@ void sn_menu_run(){
                             }
                             break;
 
+                        case SDLK_LEFT:
+                        case SDLK_RIGHT:
+
+                            if(lista[selecao].on_arrows){
+
+                                lista[selecao].on_arrows(evento.key.keysym.sym);
+
+                                refresh = true;
+
+                            }
+
+                            break;
+
                         case SDLK_RETURN:
 
-                            if(lista[selecao].funcao){
+                            if(lista[selecao].on_enter){
 
-                                lista[selecao].funcao();
+                                lista[selecao].on_enter();
 
                                 refresh = true;
 
@@ -106,7 +120,7 @@ void sn_menu_run(){
 
         if(refresh){
 
-            sn_menu_render();
+            sn_menu_render(lista, qtd, selecao);
 
             refresh = false;
 
