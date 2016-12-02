@@ -2,6 +2,7 @@
 #include "render.h"
 #include "audio.h"
 #include "ranking.h"
+#include "opcoes.h"
 
 #define MARGIN 2 /* Margem da área interna, em blocos, sem contar a borda */
 
@@ -17,6 +18,7 @@ static int cobra_tam;
 static char cobra_direcao; /* Cima, Baixo, Esquerda, Direita*/
 static int cobra_ponta; /* Cabeça da cobra */
 static int cobra_vel; /* Velocidade da cobra */
+static float fator_vel; /* Fator de mudança da velocidade */
 
 static Bloco comida;
 static int pontuacao;
@@ -90,7 +92,7 @@ static void sn_jogo_comer_comida(){
         *(cobra+i) = *(cobra+i-1);
     }
 
-    cobra_vel *= 0.99;
+    cobra_vel *= fator_vel;
 
     pontuacao++;
 
@@ -178,10 +180,36 @@ static void sn_jogo_init(){
 
     //==========================
 
+    switch(sn_opcoes_nivel_get()){
+
+        case SN_OPCAO_NIVEL_MEDIO:
+
+            cobra_vel = 120;
+            fator_vel = 0.98;
+
+            break;
+
+        case SN_OPCAO_NIVEL_DIFICIL:
+
+            cobra_vel = 100;
+            fator_vel = 0.97;
+
+            break;
+
+        default:
+
+            cobra_vel = 150;
+            fator_vel = 0.99;
+
+            break;
+
+    }
+
+    //==========================
+
     pontuacao = 0;
 
     cobra_tam = TAM_INICIAL;
-    cobra_vel = 150;
     cobra_ponta = 0;
     cobra_direcao = 'D';
 
