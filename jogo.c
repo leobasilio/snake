@@ -4,28 +4,28 @@
 #include "ranking.h"
 #include "opcoes.h"
 
-#define MARGIN 2 /* Margem da área interna, em blocos, sem contar a borda */
+#define MARGIN 2 /* Margem da Ã¡rea interna, em blocos, sem contar a borda */
 
 #define TAM_INICIAL 4 /* Tamanho inicial da cobra */
 
 typedef struct {
     int x;
     int y;
-} Bloco; /* Posições em relação ao topo esquerdo da mesa */
+} Bloco; /* PosiÃ§Ãµes em relaÃ§Ã£o ao topo esquerdo da mesa */
 
 static Bloco *cobra;
 static int cobra_tam;
 static char cobra_direcao; /* Cima, Baixo, Esquerda, Direita*/
-static int cobra_ponta; /* Cabeça da cobra */
+static int cobra_ponta; /* CabeÃ§a da cobra */
 static int cobra_vel; /* Velocidade da cobra */
-static float fator_vel; /* Fator de mudança da velocidade */
+static float fator_vel; /* Fator de mudanÃ§a da velocidade */
 
 static Bloco comida;
 static int pontuacao;
 
-static int mesa_w, mesa_h; /* Dimensões da área interna do jogo */
+static int mesa_w, mesa_h; /* DimensÃµes da Ã¡rea interna do jogo */
 
-static SN_BITMAP sprites[11];
+static SN_BITMAP sprites[11]; /* Imagens da pontuaÃ§Ã£o */
 
 static void sn_jogo_render(){
 
@@ -50,9 +50,10 @@ static void sn_jogo_render(){
         sn_render_block(MARGIN + (cobra+i)->x + 1, MARGIN + (cobra+i)->y + 1);
     }
 
+    /* Comida */
     sn_render_block(MARGIN + comida.x + 1, MARGIN + comida.y + 1);
 
-    /* Pontuação */
+    /* PontuaÃ§Ã£o */
     for(i = 0, j = 10 ; i < 3 ; i++, j *= 10){
         sn_render_bitmap(sprites[10 * (pontuacao % j) / j], MARGIN + mesa_w - 2*i, MARGIN + mesa_h + 3);
     }
@@ -72,6 +73,7 @@ static void sn_jogo_posicionar_comida(){
         comida.x = rand() % mesa_w;
         comida.y = rand() % mesa_h;
 
+        /* Verifica se nova posiÃ§Ã£o nÃ£o colide com a cobra */
         for(i = 0 ; i < cobra_tam ; i++){
             if(cobra[i].x == comida.x && cobra[i].y == comida.y){
                 break;
@@ -156,7 +158,7 @@ static bool sn_jogo_mover_cobra(){
 
     }else{
 
-        /* Verifica se a cobra não colidiu consigo */
+        /* Verifica se a cobra nÃ£o colidiu consigo */
         for(i = 0 ; i < cobra_tam ; i++){
             if(cobra[i].x == proximo.x && cobra[i].y == proximo.y && i != cobra_ponta){
                 return false;
@@ -171,6 +173,7 @@ static bool sn_jogo_mover_cobra(){
 
 }
 
+/* Inicializa variÃ¡veis */
 static void sn_jogo_init(){
 
     int i;
@@ -244,6 +247,7 @@ static void sn_jogo_init(){
 
 }
 
+/* Limpa recursos alocados no inÃ­cio */
 static void sn_jogo_clear(){
 
     int i;
@@ -258,6 +262,7 @@ static void sn_jogo_clear(){
 
 }
 
+/* Fluxo de fim de jogo */
 static void sn_jogo_fim(){
 
     sn_jogo_clear();
@@ -337,6 +342,7 @@ void sn_jogo_run(){
             }
         }
 
+        /* Se passou o tempo ou mudou de direÃ§Ã£o */
         if(SDL_TICKS_PASSED(SDL_GetTicks(), tick_inicial+cobra_vel) || nova_direcao != cobra_direcao){
 
             cobra_direcao = nova_direcao;

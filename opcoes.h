@@ -12,5 +12,6 @@ typedef enum {
 void sn_opcoes_run();
 
 SnOpcaoNivel sn_opcoes_nivel_get();
+bool sn_opcoes_som_get();
 
 #endif // OPCOES_H_INCLUDED

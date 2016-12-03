@@ -2,7 +2,7 @@
 #include "render.h"
 #include <string.h>
 
-#define QTD_LIMITE 10
+#define QTD_LIMITE 10 /* Posi√ß√µes no ranking */
 #define TAM_NOME 15
 #define NOME_ARQUIVO "ranking.bin"
 #define ALTURA (SN_BLOCOS_H-4) /* Altura da tela */
@@ -14,22 +14,23 @@ typedef struct {
     int pontuacao;
 } Registro;
 
-static int animacao = 0; // est·gio da animaÁ„o da borda
+static int animacao = 0; /* Est√°gio da anima√ß√£o da borda */
 
 static SN_BITMAP bmp_titulo;
-static Registro lista[QTD_LIMITE]; /* lista do ranking */
-static int qtd_lista = 0;
+static Registro lista[QTD_LIMITE]; /* Lista do ranking */
+static int qtd_lista = 0; /* Quantidade de registros carregados */
 
-void sn_ranking_render(Registro entradas[], int tam){
+static void sn_ranking_render(Registro entradas[], int tam){
 
     int i, y_base = (SN_BLOCOS_H - ALTURA)/2;
     char linha[26];
 
     sn_render_background();
 
+    /* T√≠tulo */
     sn_render_bitmap(bmp_titulo, SN_BLOCOS_W/2-6, y_base+2);
 
-    /* AnimaÁ„o horizontal */
+    /* Anima√ß√£o horizontal */
     for(i = 1 ; i < SN_BLOCOS_W-1 ; i++){
         if(i % 2 == animacao){
             sn_render_block(i, y_base);
@@ -38,7 +39,7 @@ void sn_ranking_render(Registro entradas[], int tam){
         }
     }
 
-    /* AnimaÁ„o vertical */
+    /* Anima√ß√£o vertical */
     for(i = y_base+1 ; i < SN_BLOCOS_H-y_base ; i++){
         if(i % 2 == animacao){
             sn_render_block(SN_BLOCOS_W-2, i);
@@ -48,7 +49,6 @@ void sn_ranking_render(Registro entradas[], int tam){
     }
 
     /* Lista do ranking */
-
     for(i = 0 ; i < QTD_LIMITE ; i++){
 
         if(i < qtd_lista){
@@ -66,7 +66,8 @@ void sn_ranking_render(Registro entradas[], int tam){
 
 }
 
-void sn_ranking_render_ler(char* nome){
+/* Renderiza a janela de leitura do nome do jogador */
+static void sn_ranking_render_ler(char* nome){
 
     int len = strlen(nome);
 
@@ -78,7 +79,9 @@ void sn_ranking_render_ler(char* nome){
 
 }
 
-void sn_ranking_ler_nome(char* nome){
+/* Janela de leitura do nome do jogador
+   Retorna o valor lido em "nome" */
+static void sn_ranking_ler_nome(char* nome){
 
     SDL_Event evento;
     bool refresh = true;
@@ -105,8 +108,9 @@ void sn_ranking_ler_nome(char* nome){
 
                 case SDL_KEYDOWN:
 
+                    /* Se letra ou espa√ßo */
                     if((evento.key.keysym.sym >= SDLK_a && evento.key.keysym.sym <= SDLK_z) ||
-                       evento.key.keysym.sym == ' '){
+                       evento.key.keysym.sym == SDLK_SPACE){
 
                         if(len < TAM_NOME){
 
@@ -158,9 +162,10 @@ void sn_ranking_ler_nome(char* nome){
 
 }
 
-/* Recebe um ponteiro para arquivo j·
-posicionado no local de inserÁ„o */
-void sn_ranking_inserir(FILE* arq, int pontuacao){
+/* Insere o registro no arquivo. Recebe um
+   ponteiro para arquivo j√° posicionado no
+   local de inser√ß√£o */
+static void sn_ranking_inserir(FILE* arq, int pontuacao){
 
     Registro novo = {"", pontuacao}, seguintes[QTD_LIMITE];
     int posicao, qtd_anteriores, qtd_seguintes;
@@ -169,24 +174,24 @@ void sn_ranking_inserir(FILE* arq, int pontuacao){
 
     if(*novo.nome){
 
-        posicao = ftell(arq); /* posiÁ„o de inserÁ„o*/
+        posicao = ftell(arq); /* Posi√ß√£o de inser√ß√£o*/
 
         qtd_anteriores = posicao / sizeof(Registro);
 
-        qtd_seguintes = fread(&seguintes, sizeof(Registro), QTD_LIMITE, arq); /* lÍ registros seguintes */
+        qtd_seguintes = fread(&seguintes, sizeof(Registro), QTD_LIMITE, arq); /* L√™ registros seguintes */
 
-        fseek(arq, posicao, SEEK_SET); /* retorna pra posiÁ„o de inserÁ„o */
+        fseek(arq, posicao, SEEK_SET); /* Retorna pra posi√ß√£o de inser√ß√£o */
 
-        fwrite(&novo, sizeof(Registro), 1, arq); /* escreve o novo */
+        fwrite(&novo, sizeof(Registro), 1, arq); /* Escreve o novo registro */
 
-        fwrite(seguintes, sizeof(Registro), MIN(qtd_seguintes, QTD_LIMITE - qtd_anteriores - 1), arq); /* escreve quantos faltam para QTD_LIMITE*/
+        fwrite(seguintes, sizeof(Registro), MIN(qtd_seguintes, QTD_LIMITE - qtd_anteriores - 1), arq); /* Escreve quantos faltam para QTD_LIMITE */
 
     }
 
 }
 
-/* Avalia a necessidade e processa a
-inclus„o do jogador no ranking */
+/* Avalia a possibilidade e processa a
+   inclus√£o do jogador no ranking */
 void sn_ranking_novo(int pontuacao){
 
     FILE* arq;
@@ -197,19 +202,20 @@ void sn_ranking_novo(int pontuacao){
 
         arq = fopen(NOME_ARQUIVO, "r+");
 
-        if(!arq){
-            arq = fopen(NOME_ARQUIVO, "w+");
+        if(!arq){ /* Se n√£o existe */
+            arq = fopen(NOME_ARQUIVO, "w+"); /* Cria novo */
         }
 
-        if(arq){
+        if(arq){ /* Se indispon√≠vel, falha silenciosamente, desativando o ranking */
 
+            /* Procura um registro acima do qual o novo jogador possa ser inserido */
             while(fread(&reg, sizeof(Registro), 1, arq)){
 
                 qtd++;
 
                 if(reg.pontuacao <= pontuacao){
 
-                    fseek(arq, -sizeof(Registro), SEEK_CUR); // volta 1 registro para inserir acima deste
+                    fseek(arq, -sizeof(Registro), SEEK_CUR); /* Volta 1 registro para inserir acima deste */
 
                     sn_ranking_inserir(arq, pontuacao);
 
@@ -221,6 +227,7 @@ void sn_ranking_novo(int pontuacao){
 
             }
 
+            /* Se ainda h√° espa√ßo no fim do ranking */
             if(qtd < QTD_LIMITE){
                 sn_ranking_inserir(arq, pontuacao);
             }
@@ -233,7 +240,8 @@ void sn_ranking_novo(int pontuacao){
 
 }
 
-void sn_ranking_init(){
+/* Inicializa vari√°veis */
+static void sn_ranking_init(){
 
     bmp_titulo = sn_load_bitmap("ranking_titulo");
 
@@ -255,7 +263,8 @@ void sn_ranking_init(){
 
 }
 
-void sn_ranking_clear(){
+/* Libera recursos alocados */
+static void sn_ranking_clear(){
 
     sn_free_bitmap(bmp_titulo);
 

@@ -3,7 +3,7 @@
 
 #include <string.h>
 
-static void sn_opcoes_dummy_on_enter(){}
+static void sn_opcoes_dummy_on_enter(){} /* Callback vazio para evitar que "enter" encerre a tela */
 static void sn_opcoes_nivel_toggle(SDL_Keycode key);
 static void sn_opcoes_som_toggle(SDL_Keycode key);
 

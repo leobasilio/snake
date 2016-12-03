@@ -7,7 +7,7 @@ static SDL_AudioDeviceID deviceId;
 static Uint8* wav_buf = NULL;
 static Uint32 wav_len, wav_pos;
 
-/* Reprodução síncrona */
+/* ReproduÃ§Ã£o sÃ­ncrona */
 void sn_audio_play(char* nome){
 
     char arquivo[50];
@@ -21,7 +21,7 @@ void sn_audio_play(char* nome){
         wav_spec.userdata = NULL;
 
         if(!sn_opcoes_som_get()){
-            SDL_memset(wav_buf, 0, wav_len); // silencia áudio
+            SDL_memset(wav_buf, 0, wav_len); /* Silencia Ã¡udio */
         }
 
         deviceId = SDL_OpenAudioDevice(NULL, 0, &wav_spec, NULL, 0);
@@ -32,7 +32,7 @@ void sn_audio_play(char* nome){
 
                 SDL_PauseAudioDevice(deviceId, 0);
 
-                while(SDL_GetQueuedAudioSize(deviceId));
+                while(SDL_GetQueuedAudioSize(deviceId)); /* Aguarda fim da execuÃ§Ã£o */
 
             }
 
@@ -56,16 +56,16 @@ static void sn_audio_callback(void* userdata, Uint8* stream, int stream_len){
 
         if(wav_pos >= wav_len) wav_pos = 0;
 
-        if(stream_len-stream_pos < wav_len-wav_pos){ // mais áudio do que stream
+        if(stream_len-stream_pos < wav_len-wav_pos){ // mais Ã¡udio do que stream
 
-            SDL_memcpy(stream+stream_pos, wav_buf+wav_pos, stream_len-stream_pos); // preenche stream até o fim
+            SDL_memcpy(stream+stream_pos, wav_buf+wav_pos, stream_len-stream_pos); // preenche stream atÃ© o fim
 
             wav_pos += stream_len-stream_pos;
             stream_pos = stream_len;
 
-        }else{ // mais stream do que áudio
+        }else{ // mais stream do que Ã¡udio
 
-            SDL_memcpy(stream+stream_pos, wav_buf+wav_pos, wav_len-wav_pos); // preenche stream o quanto dá
+            SDL_memcpy(stream+stream_pos, wav_buf+wav_pos, wav_len-wav_pos); // preenche stream o quanto dÃ¡
 
             stream_pos += wav_len-wav_pos;
             wav_pos = 0;
@@ -76,7 +76,7 @@ static void sn_audio_callback(void* userdata, Uint8* stream, int stream_len){
 
 }
 
-/* Reprodução assíncrona */
+/* ReproduÃ§Ã£o assÃ­ncrona */
 void sn_audio_start(char* nome){
 
     char arquivo[50];

@@ -4,9 +4,9 @@
 #include "global.h"
 
 typedef struct {
-    char nome[20];
-    void (*on_enter)();
-    void (*on_arrows)(SDL_Keycode key);
+    char nome[20]; /* Nome base do arquivo bitmap */
+    void (*on_enter)(); /* Callback para o enter, NULL para encerrar tela */
+    void (*on_arrows)(SDL_Keycode key); /* Callback para setas esquerda e direita */
 } SnMenuOpcao;
 
 void sn_menu_run();

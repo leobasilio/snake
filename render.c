@@ -3,8 +3,9 @@
 static SDL_Renderer* _renderer;
 static SDL_Texture* _fundo;
 
-static SN_BITMAP alfabeto[37]; /* 0-9 n鷐eros, 10-35 letras, 36 h韋en */
+static SN_BITMAP alfabeto[37]; /* 0-9 n煤meros, 10-35 letras, 36 h铆fen */
 
+/* Inicializa vari谩veis */
 void sn_render_init(SDL_Renderer* renderer){
 
     SDL_Rect rect = {0, 0, SN_JANELA_WIDTH, SN_JANELA_HEIGHT};
@@ -12,12 +13,18 @@ void sn_render_init(SDL_Renderer* renderer){
 
     _renderer = renderer;
 
+    /* Criando textura para o fundo */
+
     _fundo = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SN_JANELA_WIDTH, SN_JANELA_HEIGHT);
 
     SDL_SetRenderTarget(_renderer, _fundo);
 
+    /* Fundo s贸lido */
+
     SDL_SetRenderDrawColor(_renderer, 0xAE, 0xCE, 0x8B, 0xFF);
     SDL_RenderFillRect(_renderer, &rect);
+
+    /* Blocos por cima do fundo s贸lido */
 
     SDL_SetRenderDrawColor(_renderer, 0xA4, 0xC1, 0x84, 0xFF);
 
@@ -39,9 +46,13 @@ void sn_render_init(SDL_Renderer* renderer){
 
     SDL_SetRenderTarget(_renderer, NULL);
 
+    /* Cor para os blocos ativos */
+
     SDL_SetRenderDrawColor(_renderer, 0x36, 0x38, 0x1B, 0xFF);
 
-    //================================
+    //============================
+
+    /* Bitmaps para o alfabeto */
 
     char arquivo[20];
     int i;
@@ -60,6 +71,7 @@ void sn_render_init(SDL_Renderer* renderer){
 
 }
 
+/* Libera recursos alocados */
 void sn_render_clear(){
 
     int i;
@@ -72,6 +84,7 @@ void sn_render_clear(){
 
 }
 
+/* Renderiza plano de fundo */
 void sn_render_background(){
 
     SDL_Rect rect = {0, 0, SN_JANELA_WIDTH, SN_JANELA_HEIGHT};
@@ -80,6 +93,8 @@ void sn_render_background(){
 
 }
 
+/* Renderiza um bloco individual com base nas
+   coordenadas pr贸prias do jogo */
 void sn_render_block(int x, int y){
 
     SDL_Rect rect = {x*SN_BLOCO_SIZE + SN_BLOCO_PADDING,
@@ -91,6 +106,8 @@ void sn_render_block(int x, int y){
 
 }
 
+/* Renderiza arquivo bitmap com base nas
+   coordenadas pr贸prias do jogo */
 void sn_render_file(const char* nome, int x, int y){
 
     SN_BITMAP bitmap = sn_load_bitmap(nome);
@@ -101,6 +118,8 @@ void sn_render_file(const char* nome, int x, int y){
 
 }
 
+/* Renderiza bitmap da mem贸ria com base nas
+   coordenadas pr贸prias do jogo */
 void sn_render_bitmap(SN_BITMAP bitmap, int x, int y){
 
     SDL_Rect dst_rect = {x*SN_BLOCO_SIZE + SN_BLOCO_PADDING,
@@ -112,10 +131,12 @@ void sn_render_bitmap(SN_BITMAP bitmap, int x, int y){
 
 }
 
+/* Envia buffer para a tela */
 void sn_render_flush(){
     SDL_RenderPresent(_renderer);
 }
 
+/* Carrega um arquivo bitmap para a mem贸ria */
 SN_BITMAP sn_load_bitmap(const char* nome){
 
     SN_BITMAP ret;
@@ -135,10 +156,13 @@ SN_BITMAP sn_load_bitmap(const char* nome){
 
 }
 
+/* Libera um bitmap da mem贸ria */
 void sn_free_bitmap(SN_BITMAP bitmap){
     SDL_DestroyTexture(bitmap.texture);
 }
 
+/* Renderiza uma string com base nas
+   coordenadas pr贸prias do jogo */
 void sn_render_string(char* s, int x, int y){
 
     for( ; *s ; s++, x++){

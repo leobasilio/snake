@@ -16,6 +16,7 @@ static void sn_menu_render(SnMenuOpcao* lista, int qtd, int selecao){
 
     sn_render_file("logo", 7, 2);
 
+    /* Opções do menu */
     for(i = 0 ; i < qtd ; i++){
 
         sprintf(nome, "menu_%s_%s", lista[i].nome, (selecao == i) ? "on" : "off");
@@ -31,14 +32,15 @@ static void sn_menu_render(SnMenuOpcao* lista, int qtd, int selecao){
 void sn_menu_run(){
 
     SnMenuOpcao lista[4] = {{"iniciar", sn_jogo_run, NULL},
-                          {"opcoes", sn_opcoes_run, NULL},
-                          {"ranking", sn_ranking_run, NULL},
-                          {"sair", NULL, NULL}};
+                            {"opcoes", sn_opcoes_run, NULL},
+                            {"ranking", sn_ranking_run, NULL},
+                            {"sair", NULL, NULL}};
 
     sn_menu_custom(lista, 4);
 
 }
 
+/* Lógica para menu personalizado */
 void sn_menu_custom(SnMenuOpcao* lista, int qtd){
 
     SDL_Event evento;
