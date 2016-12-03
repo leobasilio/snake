@@ -1,10 +1,36 @@
 #include "menu.h"
 #include "render.h"
 
+#include <sys/types.h>
+#include <dirent.h>
+
+bool checkdir(char* nome){
+
+    DIR* dir = opendir(nome);
+
+    if(dir){
+        closedir(dir);
+        return true;
+    }
+
+    return false;
+
+}
+
 int main(int argc, char* argv[]){
 
+    if(!checkdir("audio")){
+        printf("O diretório \"audio\" não foi localizado.\n");
+        return -1;
+    }else if(!checkdir("sprites")){
+        printf("O diretório \"sprites\" não foi localizado.\n");
+        return -1;
+    }
+
+    //========================
+
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0){
-        printf("Falha ao inicializar a SDL: %s", SDL_GetError());
+        printf("Falha ao inicializar a SDL: %s\n", SDL_GetError());
         return -1;
     }
 
@@ -25,13 +51,13 @@ int main(int argc, char* argv[]){
             SDL_DestroyRenderer(renderer);
 
         }else{
-            printf("Falha ao criar o renderer: %s", SDL_GetError());
+            printf("Falha ao criar o renderer: %s\n", SDL_GetError());
         }
 
         SDL_DestroyWindow(janela);
 
     }else{
-        printf("Falha ao criar a janela: %s", SDL_GetError());
+        printf("Falha ao criar a janela: %s\n", SDL_GetError());
     }
 
     SDL_Quit();
