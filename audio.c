@@ -16,7 +16,9 @@ void sn_audio_play(char* nome){
 
     sn_audio_start(nome);
 
-    while(wav_pos < wav_len);
+    while(wav_pos < wav_len){
+        SDL_Delay(100);
+    }
 
     sn_audio_stop();
 
