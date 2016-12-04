@@ -73,7 +73,7 @@ static void sn_opcoes_som_toggle(SDL_Keycode key){
 
     }else if(key == SDLK_LEFT){
 
-        op_som = false;
+        op_som = true;
 
         strcpy(lista[1].nome, "opcoes_sl");
 
