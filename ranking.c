@@ -7,8 +7,6 @@
 #define NOME_ARQUIVO "ranking.bin"
 #define ALTURA (SN_BLOCOS_H-4) /* Altura da tela */
 
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-
 typedef struct {
     char nome[TAM_NOME+1];
     int pontuacao;
@@ -89,7 +87,7 @@ static void sn_ranking_ler_nome(char* nome){
 
     while(SDL_PollEvent(&evento)){ // limpar pool de eventos
         if(evento.type == SDL_QUIT){
-            exit(0);
+            exit(EXIT_SUCCESS);
             return;
         }
     }
@@ -102,7 +100,7 @@ static void sn_ranking_ler_nome(char* nome){
 
                 case SDL_QUIT:
 
-                    exit(0);
+                    exit(EXIT_SUCCESS);
 
                     return;
 
@@ -184,7 +182,7 @@ static void sn_ranking_inserir(FILE* arq, int pontuacao){
 
         fwrite(&novo, sizeof(Registro), 1, arq); /* Escreve o novo registro */
 
-        fwrite(seguintes, sizeof(Registro), MIN(qtd_seguintes, QTD_LIMITE - qtd_anteriores - 1), arq); /* Escreve quantos faltam para QTD_LIMITE */
+        fwrite(seguintes, sizeof(Registro), SDL_min(qtd_seguintes, QTD_LIMITE - qtd_anteriores - 1), arq); /* Escreve quantos faltam para QTD_LIMITE */
 
     }
 
@@ -287,7 +285,7 @@ void sn_ranking_run(){
 
                     sn_ranking_clear();
 
-                    exit(0);
+                    exit(EXIT_SUCCESS);
 
                     return;
 

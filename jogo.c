@@ -90,6 +90,14 @@ static void sn_jogo_comer_comida(){
 
     cobra = realloc(cobra, ++cobra_tam * sizeof(Bloco));
 
+    if(cobra == NULL){
+
+        printf("Erro ao alocar memória.\n");
+
+        exit(EXIT_FAILURE);
+
+    }
+
     for(i = cobra_tam-1 ; i > cobra_ponta ; i--){
         *(cobra+i) = *(cobra+i-1);
     }
@@ -218,6 +226,14 @@ static void sn_jogo_init(){
 
     cobra = malloc(cobra_tam*sizeof(Bloco));
 
+    if(cobra == NULL){
+
+        printf("Erro ao alocar memória.\n");
+
+        exit(EXIT_FAILURE);
+
+    }
+
     cobra[0].x = mesa_w/2;
     cobra[0].y = mesa_h/2;
 
@@ -305,7 +321,7 @@ void sn_jogo_run(){
 
                     sn_jogo_clear();
 
-                    exit(0);
+                    exit(EXIT_SUCCESS);
 
                     return;
 

@@ -55,7 +55,7 @@ void sn_menu_custom(SnMenuOpcao* lista, int qtd){
 
                 case SDL_QUIT:
 
-                    exit(0);
+                    exit(EXIT_SUCCESS);
 
                     return;
 

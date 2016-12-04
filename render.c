@@ -146,6 +146,14 @@ SN_BITMAP sn_load_bitmap(const char* nome){
 
     SDL_Surface* bitmap = SDL_LoadBMP(arquivo);
 
+    if(bitmap == NULL){
+
+        printf("Erro ao carregar o arquivo \"%s\": %s\n", arquivo, SDL_GetError());
+
+        exit(EXIT_FAILURE);
+
+    }
+
     SDL_GetClipRect(bitmap, &ret.rect);
 
     ret.texture = SDL_CreateTextureFromSurface(_renderer, bitmap);
