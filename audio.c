@@ -5,7 +5,7 @@
 
 static SDL_AudioDeviceID deviceId;
 static Uint8* wav_buf = NULL;
-static Uint32 wav_len, wav_pos;
+static Uint32 wav_len = 0, wav_pos = 0, wav_dur = 0; /* Tamanho em bytes, posição, duração em ms */
 
 static bool modo_sinc = false;
 
@@ -16,9 +16,7 @@ void sn_audio_play(char* nome){
 
     sn_audio_start(nome);
 
-    while(wav_pos < wav_len){
-        SDL_Delay(100);
-    }
+    SDL_Delay(wav_dur); /* Aguarda execução do áudio */
 
     sn_audio_stop();
 
@@ -74,28 +72,28 @@ void sn_audio_start(char* nome){
     char arquivo[50];
     SDL_AudioSpec wav_spec;
 
-    if(!sn_opcoes_som_get() && !modo_sinc) return;
-
     sprintf(arquivo, NOME_AUDIO, nome);
 
     if(SDL_LoadWAV(arquivo, &wav_spec, &wav_buf, &wav_len) != NULL){
 
-        if(!sn_opcoes_som_get()){
-            SDL_memset(wav_buf, 0, wav_len);
-        }
+        wav_dur = 1000 * wav_len / (wav_spec.freq * wav_spec.channels * SDL_AUDIO_BITSIZE(wav_spec.format) / 8);
 
-        wav_spec.callback = sn_audio_callback;
-        wav_spec.userdata = NULL;
+        if(sn_opcoes_som_get()){
 
-        deviceId = SDL_OpenAudioDevice(NULL, 0, &wav_spec, NULL, 0);
+            wav_spec.callback = sn_audio_callback;
+            wav_spec.userdata = NULL;
 
-        if(deviceId != 0){
+            deviceId = SDL_OpenAudioDevice(NULL, 0, &wav_spec, NULL, 0);
 
-            wav_pos = 0;
+            if(deviceId != 0){
 
-            SDL_PauseAudioDevice(deviceId, 0);
+                wav_pos = 0;
 
-            return;
+                SDL_PauseAudioDevice(deviceId, 0);
+
+                return;
+
+            }
 
         }
 
@@ -117,6 +115,9 @@ void sn_audio_stop(){
         SDL_FreeWAV(wav_buf);
 
         wav_buf = NULL;
+        wav_dur = 0;
+        wav_pos = 0;
+        wav_len = 0;
 
     }
 
